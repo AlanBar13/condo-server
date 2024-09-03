@@ -34,4 +34,9 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
+
+  @Post(':id/house/:houseId')
+  addUserToHouse(@Param('id') id: string, @Param('houseId') houseId: string) {
+    return this.usersService.addUserToHouse(+id, +houseId);
+  }
 }

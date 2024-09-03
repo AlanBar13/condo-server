@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { House } from 'src/houses/entities/house.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class User {
@@ -16,4 +17,13 @@ export class User {
 
     @Column({ default: false })
     isOwner: boolean
+
+    @ManyToOne(() => House, (house) => house.habitants)
+    house: House
+
+    @CreateDateColumn({ type: 'timestamptz'})
+    createdAt: Date
+
+    @UpdateDateColumn({ type: 'timestamptz'})
+    updatedAt: Date
 }

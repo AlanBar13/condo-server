@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { House } from 'src/houses/entities/house.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>){}
+  constructor(@InjectRepository(User) private userRepository: Repository<User>, @InjectRepository(House) private houseRepository: Repository<House>){}
 
   create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User();
@@ -21,11 +22,13 @@ export class UsersService {
   }
 
   findAll(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({ relations: {
+      house: true
+    }});
   }
 
   findOne(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOne({ where: { id }, relations: { house: true } });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
@@ -37,5 +40,21 @@ export class UsersService {
   async remove(id: number): Promise<string> {
     await this.userRepository.delete(id)
     return `User #${id} removed`;
+  }
+
+  async addUserToHouse(userId: number, houseId: number) {
+    const house = await this.houseRepository.findOneBy({ id: houseId });
+    if (house === null) {
+      throw new NotFoundException("House not found");
+    }
+
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (user === null) {
+      throw new NotFoundException("User not found");
+    }
+
+    user.house = house;
+
+    return this.userRepository.update(userId, user)
   }
 }
