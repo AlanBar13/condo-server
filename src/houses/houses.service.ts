@@ -8,7 +8,9 @@ import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class HousesService {
-  constructor(@InjectRepository(House) private houseRepository: Repository<House>) {}
+  constructor(
+    @InjectRepository(House) private houseRepository: Repository<House>,
+  ) {}
 
   create(createHouseDto: CreateHouseDto): Promise<House> {
     const house = new House();
@@ -21,13 +23,18 @@ export class HousesService {
   }
 
   findAll(): Promise<House[]> {
-    return this.houseRepository.find({ relations: {
-      habitants: true
-    }});
+    return this.houseRepository.find({
+      relations: {
+        habitants: true,
+      },
+    });
   }
 
   findOne(id: number): Promise<House> {
-    return this.houseRepository.findOne({ where: { id }, relations: { habitants: true }});
+    return this.houseRepository.findOne({
+      where: { id },
+      relations: { habitants: true },
+    });
   }
 
   async update(id: number, updateHouseDto: UpdateHouseDto): Promise<House> {

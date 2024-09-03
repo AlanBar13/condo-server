@@ -11,7 +11,7 @@ import { House } from './houses/entities/house.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), 
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'dpg-crb4v32j1k6c73cn5j5g-a.ohio-postgres.render.com',
@@ -21,10 +21,11 @@ import { House } from './houses/entities/house.entity';
       database: 'conso_app_db',
       ssl: true,
       entities: [User, House],
-      synchronize: true // Remove this for prod
+      synchronize: true, // Remove this for prod
     }),
-    UsersModule, 
-    HousesModule],
+    UsersModule,
+    HousesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
