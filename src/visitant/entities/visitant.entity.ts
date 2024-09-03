@@ -1,36 +1,36 @@
 import { House } from 'src/houses/entities/house.entity';
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    UpdateDateColumn,
-    ManyToOne,
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
 export class Visitant {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    fullName: string;
+  @Column()
+  fullName: string;
 
-    @ManyToOne(() => House, (house) => house.visitantRequest)
-    house: House;
-    
-    @Column()
-    qrCode: string;
+  @ManyToOne(() => House, (house) => house.visitantRequest)
+  house: House;
 
-    @Column({ type: 'timestamptz'})
-    startDate: Date;
+  @Column()
+  qrCode: string;
 
-    @Column({ type: 'timestamptz', nullable: true })
-    endDate: Date;
+  @Column({ type: 'timestamptz' })
+  startDate: Date;
 
-    @CreateDateColumn({ type: 'timestamptz' })
-    createdAt: Date;
+  @Column({ type: 'timestamptz', nullable: true })
+  endDate: Date;
 
-    @UpdateDateColumn({ type: 'timestamptz' })
-    updatedAt: Date;
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 }

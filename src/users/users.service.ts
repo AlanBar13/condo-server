@@ -1,25 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
 import { House } from 'src/houses/entities/house.entity';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(House) private houseRepository: Repository<House>,
+    private authService: AuthService,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User();
 
     user.name = createUserDto.name;
     user.email = createUserDto.email;
     user.isOwner = createUserDto.isOwner;
     user.lastName = createUserDto.lastName;
+
+    const hashedPass = await this.authService.hashPassword(
+      createUserDto.password,
+    );
+    user.password = hashedPass;
 
     return this.userRepository.save(user);
   }
