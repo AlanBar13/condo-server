@@ -5,9 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { HousesModule } from './houses/houses.module';
-
-import { User } from './users/entities/user.entity';
-import { House } from './houses/entities/house.entity';
+import { VisitantModule } from './visitant/visitant.module';
 
 @Module({
   imports: [
@@ -20,11 +18,12 @@ import { House } from './houses/entities/house.entity';
       password: 'mO9owPpxv6PWKPVuDp239QXJfSs3vKPt',
       database: 'conso_app_db',
       ssl: true,
-      entities: [User, House],
+      autoLoadEntities: true,
       synchronize: true, // Remove this for prod
     }),
     UsersModule,
     HousesModule,
+    VisitantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

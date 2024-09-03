@@ -1,4 +1,5 @@
 import { User } from 'src/users/entities/user.entity';
+import { Visitant } from 'src/visitant/entities/visitant.entity';
 import {
   Entity,
   Column,
@@ -19,11 +20,14 @@ export class House {
   @Column()
   number: number;
 
-  @Column({ default: false })
+  @Column()
   address: string;
 
   @OneToMany(() => User, (user) => user.house)
   habitants: User[];
+
+  @OneToMany(() => Visitant, (visitant) => visitant.house)
+  visitantRequest: Visitant[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
