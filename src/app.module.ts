@@ -21,7 +21,7 @@ import { House } from './houses/entities/house.entity';
       database: 'conso_app_db',
       ssl: true,
       entities: [User, House],
-      synchronize: true
+      synchronize: true // Remove this for prod
     }),
     UsersModule, 
     HousesModule],
