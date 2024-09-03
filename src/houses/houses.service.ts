@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { House } from './entities/house.entity';
+import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class HousesService {
-  create(createHouseDto: CreateHouseDto) {
-    return 'This action adds a new house';
+  constructor(@InjectRepository(House) private houseRepository: Repository<House>) {}
+
+  create(createHouseDto: CreateHouseDto): Promise<House> {
+    const house = new House();
+
+    house.condo = createHouseDto.condo;
+    house.address = createHouseDto.address;
+    house.number = createHouseDto.number;
+
+    return this.houseRepository.save(house);
   }
 
-  findAll() {
-    return `This action returns all houses`;
+  findAll(): Promise<House[]> {
+    return this.houseRepository.find({ relations: {
+      habitants: true
+    }});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} house`;
+  findOne(id: number): Promise<House> {
+    return this.houseRepository.findOne({ where: { id }, relations: { habitants: true }});
   }
 
-  update(id: number, updateHouseDto: UpdateHouseDto) {
-    return `This action updates a #${id} house`;
+  async update(id: number, updateHouseDto: UpdateHouseDto): Promise<House> {
+    await this.houseRepository.update(id, updateHouseDto);
+
+    return this.houseRepository.findOneBy({ id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} house`;
+  async remove(id: number): Promise<string> {
+    await this.houseRepository.delete(id);
+
+    return `House #${id} removed`;
   }
 }
