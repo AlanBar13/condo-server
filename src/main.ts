@@ -14,6 +14,7 @@ async function bootstrap() {
     .setTitle('Condo Server')
     .setDescription('API to manage the Condo App')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

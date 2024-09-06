@@ -24,7 +24,7 @@ export class AuthService {
   ): Promise<{ access_token: string }> {
     const user = await this.userRepository.findOne({
       where: { email: username },
-      select: { password: true },
+      select: { id: true, email: true, password: true },
     });
     if (!user) {
       throw new NotFoundException('User not found');
