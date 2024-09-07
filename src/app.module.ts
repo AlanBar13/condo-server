@@ -21,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
       ssl: true,
       autoLoadEntities: true,
       synchronize: true, // Remove this for prod
+      //logging: true
     }),
     UsersModule,
     HousesModule,

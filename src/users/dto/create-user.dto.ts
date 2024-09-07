@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from '../entities/user.entity';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -15,4 +16,7 @@ export class CreateUserDto {
 
   @ApiProperty()
   readonly isOwner: boolean;
+
+  @ApiProperty({ enum: ['admin', 'user'] })
+  readonly role: UserRole;
 }

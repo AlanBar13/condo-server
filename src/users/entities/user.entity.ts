@@ -8,6 +8,11 @@ import {
   ManyToOne,
 } from 'typeorm';
 
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -27,6 +32,9 @@ export class User {
 
   @Column({ default: false })
   isOwner: boolean;
+
+  @Column({ type: 'enum', enum: UserRole, default: 'user' })
+  role: UserRole;
 
   @ManyToOne(() => House, (house) => house.habitants)
   house: House;

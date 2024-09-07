@@ -4,6 +4,10 @@ import { UpdateVisitantDto } from './dto/update-visitant.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Visitant } from './entities/visitant.entity';
 import { Repository } from 'typeorm';
+import { toDataURL } from 'qrcode';
+import { User } from 'src/users/entities/user.entity';
+import { Request } from 'express';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class VisitantService {
@@ -11,15 +15,23 @@ export class VisitantService {
     @InjectRepository(Visitant)
     private visitantRepository: Repository<Visitant>,
   ) {}
-  create(createVisitantDto: CreateVisitantDto): Promise<Visitant> {
+  async create(
+    createVisitantDto: CreateVisitantDto,
+    req: Request,
+  ): Promise<Visitant> {
     const visitant = new Visitant();
+    const uuid = uuidv4();
 
+    visitant.id = uuid;
     visitant.fullName = createVisitantDto.fullName;
     visitant.startDate = createVisitantDto.startDate;
     visitant.endDate = createVisitantDto.endDate;
 
     // TODO: Create QR code
-    visitant.qrCode = 'Testqrcode';
+    const customUrl = `${this.getUrl(req)}/${uuid}`;
+    console.log(customUrl);
+    const qrcode = await toDataURL(customUrl);
+    visitant.qrCode = qrcode;
 
     return this.visitantRepository.save(visitant);
   }
@@ -59,5 +71,9 @@ export class VisitantService {
     await this.visitantRepository.delete(id);
 
     return `Visitant #${id} deleted`;
+  }
+
+  private getUrl(req: Request): string {
+    return `${req.protocol}://${req.get('Host')}${req.originalUrl}`;
   }
 }

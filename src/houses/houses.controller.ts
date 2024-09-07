@@ -12,7 +12,7 @@ import { HousesService } from './houses.service';
 import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+//import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('Houses')
 @Controller('houses')
@@ -20,7 +20,7 @@ export class HousesController {
   constructor(private readonly housesService: HousesService) {}
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Post()
   create(@Body() createHouseDto: CreateHouseDto) {
     return this.housesService.create(createHouseDto);
@@ -42,7 +42,7 @@ export class HousesController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.housesService.remove(+id);

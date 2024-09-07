@@ -6,20 +6,29 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { VisitantService } from './visitant.service';
 import { CreateVisitantDto } from './dto/create-visitant.dto';
 import { UpdateVisitantDto } from './dto/update-visitant.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Request as ExpressRequest } from 'express';
 
 @ApiTags('Visitant')
 @Controller('visitant')
 export class VisitantController {
   constructor(private readonly visitantService: VisitantService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createVisitantDto: CreateVisitantDto) {
-    return this.visitantService.create(createVisitantDto);
+  create(
+    @Request() req: ExpressRequest,
+    @Body() createVisitantDto: CreateVisitantDto,
+  ) {
+    return this.visitantService.create(createVisitantDto, req);
   }
 
   @Get()

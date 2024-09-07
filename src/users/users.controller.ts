@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
@@ -17,6 +19,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -45,5 +48,13 @@ export class UsersController {
   @Post(':id/house/:houseId')
   addUserToHouse(@Param('id') id: string, @Param('houseId') houseId: string) {
     return this.usersService.addUserToHouse(+id, +houseId);
+  }
+
+  @Delete(':id/house/:houseId')
+  deleteUserFromHouse(
+    @Param('id') id: string,
+    @Param('houseId') houseId: string,
+  ) {
+    return this.usersService.removeUserFromHouse(+id, +houseId);
   }
 }

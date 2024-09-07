@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -24,18 +25,35 @@ export class AuthService {
   ): Promise<{ access_token: string }> {
     const user = await this.userRepository.findOne({
       where: { email: username },
-      select: { id: true, email: true, password: true },
+      relations: {
+        house: true,
+      },
     });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const match = await compare(password, user.password);
+    if (user.house == null) {
+      throw new ForbiddenException('User not added to house');
+    }
+
+    // TODO: Refactor this to get the password and the relation on the same query
+    const userPass = await this.userRepository.findOne({
+      where: { id: user.id },
+      select: ['password'],
+    });
+    const match = await compare(password, userPass.password);
     if (!match) {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: user.id, username: user.email };
+    const payload = {
+      sub: user.id,
+      username: user.email,
+      name: user.name,
+      lastName: user.lastName,
+      house: user.house,
+    };
 
     // generate JWT
     return {
