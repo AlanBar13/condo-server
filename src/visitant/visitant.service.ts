@@ -17,6 +17,7 @@ export class VisitantService {
   ) {}
   async create(
     createVisitantDto: CreateVisitantDto,
+    user: User,
     req: Request,
   ): Promise<Visitant> {
     const visitant = new Visitant();
@@ -26,6 +27,7 @@ export class VisitantService {
     visitant.fullName = createVisitantDto.fullName;
     visitant.startDate = createVisitantDto.startDate;
     visitant.endDate = createVisitantDto.endDate;
+    visitant.house = user.house;
 
     // TODO: Create QR code
     const customUrl = `${this.getUrl(req)}/${uuid}`;

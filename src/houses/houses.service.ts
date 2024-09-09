@@ -33,7 +33,7 @@ export class HousesService {
   findOne(id: number): Promise<House> {
     return this.houseRepository.findOne({
       where: { id },
-      relations: { habitants: true },
+      relations: { habitants: true, visitantRequest: true },
     });
   }
 

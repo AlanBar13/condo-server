@@ -15,6 +15,8 @@ import { UpdateVisitantDto } from './dto/update-visitant.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request as ExpressRequest } from 'express';
+import { RequestUser } from 'src/decorators/user.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('Visitant')
 @Controller('visitant')
@@ -27,8 +29,9 @@ export class VisitantController {
   create(
     @Request() req: ExpressRequest,
     @Body() createVisitantDto: CreateVisitantDto,
+    @RequestUser() user: User
   ) {
-    return this.visitantService.create(createVisitantDto, req);
+    return this.visitantService.create(createVisitantDto, user, req);
   }
 
   @Get()
