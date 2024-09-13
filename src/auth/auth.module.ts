@@ -10,7 +10,6 @@ import { JwtModule } from '@nestjs/jwt';
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       global: true,
-      secret: 'topscrettoken',
       signOptions: { expiresIn: '300s' },
     }),
   ],

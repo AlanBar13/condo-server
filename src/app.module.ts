@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,17 +11,21 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'dpg-crb4v32j1k6c73cn5j5g-a.ohio-postgres.render.com',
-      port: 5432,
-      username: 'conso_app_db_user',
-      password: 'mO9owPpxv6PWKPVuDp239QXJfSs3vKPt',
-      database: 'conso_app_db',
-      ssl: true,
-      autoLoadEntities: true,
-      synchronize: true, // Remove this for prod
-      //logging: true
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get("DATABASE_HOST"),
+        port: +configService.get("DATABASE_PORT"),
+        username: configService.get("DATABASE_USER"),
+        password: configService.get("DATABASE_PASSWORD"),
+        database: configService.get("DATABASE_NAME"),
+        ssl: true,
+        autoLoadEntities: true,
+        synchronize: true, // Remove this for prod
+        //logging: true
+      }),
+      inject: [ConfigService]
     }),
     UsersModule,
     HousesModule,
