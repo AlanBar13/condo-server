@@ -15,17 +15,17 @@ import { AuthModule } from './auth/auth.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get("DATABASE_HOST"),
-        port: +configService.get("DATABASE_PORT"),
-        username: configService.get("DATABASE_USER"),
-        password: configService.get("DATABASE_PASSWORD"),
-        database: configService.get("DATABASE_NAME"),
+        host: configService.get('DATABASE_HOST'),
+        port: +configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE_NAME'),
         ssl: true,
         autoLoadEntities: true,
         synchronize: true, // Remove this for prod
         //logging: true
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     UsersModule,
     HousesModule,

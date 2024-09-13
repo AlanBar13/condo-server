@@ -58,7 +58,7 @@ export class AuthService {
     // generate JWT
     return {
       access_token: await this.jwtService.signAsync(payload, {
-        secret: this.configService.get("JWT_SECRET")
+        secret: this.configService.get('JWT_SECRET'),
       }),
     };
   }
