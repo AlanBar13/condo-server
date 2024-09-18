@@ -11,6 +11,8 @@ import {
 export enum UserRole {
   ADMIN = 'admin',
   USER = 'user',
+  OWNER = 'ownwer',
+  DEV = 'dev',
 }
 
 @Entity()

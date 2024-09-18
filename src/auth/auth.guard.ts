@@ -1,13 +1,16 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { User } from 'src/users/entities/user.entity';
+import { ROLES_KEY } from 'src/decorators/roles.decorator';
+import { User, UserRole } from 'src/users/entities/user.entity';
 
 declare global {
   namespace Express {
@@ -19,9 +22,16 @@ declare global {
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private reflector: Reflector,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
@@ -29,11 +39,20 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const user = await this.jwtService.verifyAsync<User>(token, {
         secret: process.env.JWT_SECRET,
       });
 
-      request.user = payload;
+      if (requiredRoles) {
+        const roleFound = requiredRoles.some((role) =>
+          user.role.includes(role),
+        );
+        if (!roleFound) {
+          throw new ForbiddenException('Incorrect Role');
+        }
+      }
+
+      request.user = user;
     } catch (err) {
       Logger.warn(err.message);
       throw new UnauthorizedException();
