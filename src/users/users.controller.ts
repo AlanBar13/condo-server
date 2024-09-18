@@ -9,7 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,48 +19,55 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: "Creates a user" })
+  @ApiResponse({ status: 201, description: 'User created successfully' })
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  @ApiResponse({ status: 201, description: 'User created successfully' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
+  @ApiOperation({ summary: "Gets all users" })
   @ApiResponse({ status: 200, description: 'List of all the users available' })
+  @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @ApiOperation({ summary: "Gets one user" })
   @ApiResponse({ status: 200, description: 'User information' })
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
-  @Patch(':id')
+  @ApiOperation({ summary: "Updates a user" })
   @ApiResponse({ status: 200, description: 'User updated successfully' })
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
+  @ApiOperation({ summary: "Deletes a user" })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
 
-  @Post(':id/house/:houseId')
+  @ApiOperation({ summary: "Adds a user to a house" })
   @ApiResponse({ status: 200, description: 'User added to House successfully' })
+  @Post(':id/house/:houseId')
   addUserToHouse(@Param('id') id: string, @Param('houseId') houseId: string) {
     return this.usersService.addUserToHouse(+id, +houseId);
   }
 
-  @Delete(':id/house/:houseId')
+  @ApiOperation({ summary: "Removes a user from a house" })
   @ApiResponse({
     status: 200,
     description: 'User removed to House successfully',
   })
+  @Delete(':id/house/:houseId')
   deleteUserFromHouse(
     @Param('id') id: string,
     @Param('houseId') houseId: string,

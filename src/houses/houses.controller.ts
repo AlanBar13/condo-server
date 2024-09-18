@@ -13,7 +13,7 @@ import {
 import { HousesService } from './houses.service';
 import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 //import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('Houses')
@@ -21,37 +21,42 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class HousesController {
   constructor(private readonly housesService: HousesService) {}
 
-  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: "Creates a house" })
+  @ApiResponse({ status: 201, description: 'House created successfully' })
   @ApiBearerAuth()
+  @HttpCode(HttpStatus.CREATED)
   //@UseGuards(AuthGuard)
   @Post()
-  @ApiResponse({ status: 201, description: 'House created successfully' })
   create(@Body() createHouseDto: CreateHouseDto) {
     return this.housesService.create(createHouseDto);
   }
 
-  @Get()
+  @ApiOperation({ summary: "Gets all houses" })
   @ApiResponse({ status: 200, description: 'List of all the houses available' })
+  @Get()
   findAll() {
     return this.housesService.findAll();
   }
 
-  @Get(':id')
+  @ApiOperation({ summary: "Gets single house" })
   @ApiResponse({ status: 200, description: 'House information' })
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.housesService.findOne(+id);
   }
 
-  @Patch(':id')
+  @ApiOperation({ summary: "Updates a house" })
   @ApiResponse({ status: 200, description: 'House updated successfully' })
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateHouseDto: UpdateHouseDto) {
     return this.housesService.update(+id, updateHouseDto);
   }
 
+  @ApiOperation({ summary: "Deletes a house" })
+  @ApiResponse({ status: 200, description: 'House deleted successfully' })
   @ApiBearerAuth()
   //@UseGuards(AuthGuard)
   @Delete(':id')
-  @ApiResponse({ status: 200, description: 'House deleted successfully' })
   remove(@Param('id') id: string) {
     return this.housesService.remove(+id);
   }
