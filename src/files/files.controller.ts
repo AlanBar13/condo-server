@@ -19,7 +19,7 @@ import {
   ApiConsumes,
   ApiResponse,
   ApiTags,
-  ApiOperation
+  ApiOperation,
 } from '@nestjs/swagger';
 import { UploadFileDto } from './dto/upload-file.dto';
 
@@ -28,7 +28,7 @@ import { UploadFileDto } from './dto/upload-file.dto';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @ApiOperation({ summary: "Uploads a file to storage" })
+  @ApiOperation({ summary: 'Uploads a file to storage' })
   @ApiConsumes('multipart/form-data')
   @ApiResponse({ status: 201, description: 'File uploaded successfully' })
   @HttpCode(HttpStatus.CREATED)
@@ -50,15 +50,12 @@ export class FilesController {
     file: Express.Multer.File,
     @Body() uploadFileDto: UploadFileDto,
   ) {
-    const isPublicValue = uploadFileDto.isPublic === "true" ? true : false;
-    console.log(uploadFileDto.isPublic)
-    return await this.filesService.uploadSingleFile(
-      file,
-      isPublicValue,
-    );
+    const isPublicValue = uploadFileDto.isPublic === 'true' ? true : false;
+    console.log(uploadFileDto.isPublic);
+    return await this.filesService.uploadSingleFile(file, isPublicValue);
   }
 
-  @ApiOperation({ summary: "Gets url for storage object" })
+  @ApiOperation({ summary: 'Gets url for storage object' })
   @ApiResponse({ status: 200, description: 'File URL returned' })
   @HttpCode(HttpStatus.OK)
   @Get(':key')
@@ -66,8 +63,13 @@ export class FilesController {
     return { url: this.filesService.getFileUrl(key) };
   }
 
-  @ApiOperation({ summary: "Gets signed url for storage object, this last 3hrs" })
-  @ApiResponse({ status: 200, description: 'File signed  URL returned, this link will expire in 3hrs' })
+  @ApiOperation({
+    summary: 'Gets signed url for storage object, this last 3hrs',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'File signed  URL returned, this link will expire in 3hrs',
+  })
   @HttpCode(HttpStatus.OK)
   @Get('/signed-url/:key')
   async getSignedUrl(@Param('key') key: string) {
@@ -75,7 +77,7 @@ export class FilesController {
     return { url };
   }
 
-  @ApiOperation({ summary: "Deletes a storage object" })
+  @ApiOperation({ summary: 'Deletes a storage object' })
   @ApiResponse({ status: 200, description: 'File deleted successfully' })
   @HttpCode(HttpStatus.OK)
   @Delete(':key')

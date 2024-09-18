@@ -47,7 +47,7 @@ export class FilesService {
       await this.client.send(command);
 
       return {
-        url: isPublic ? this.getFileUrl(key) : (await this.getPreSignedUrl(key)),
+        url: isPublic ? this.getFileUrl(key) : await this.getPreSignedUrl(key),
         key,
         isPublic,
       };

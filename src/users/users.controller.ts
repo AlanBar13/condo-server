@@ -19,7 +19,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiOperation({ summary: "Creates a user" })
+  @ApiOperation({ summary: 'Creates a user' })
   @ApiResponse({ status: 201, description: 'User created successfully' })
   @HttpCode(HttpStatus.CREATED)
   @Post()
@@ -27,42 +27,42 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @ApiOperation({ summary: "Gets all users" })
+  @ApiOperation({ summary: 'Gets all users' })
   @ApiResponse({ status: 200, description: 'List of all the users available' })
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @ApiOperation({ summary: "Gets one user" })
+  @ApiOperation({ summary: 'Gets one user' })
   @ApiResponse({ status: 200, description: 'User information' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
-  @ApiOperation({ summary: "Updates a user" })
+  @ApiOperation({ summary: 'Updates a user' })
   @ApiResponse({ status: 200, description: 'User updated successfully' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @ApiOperation({ summary: "Deletes a user" })
+  @ApiOperation({ summary: 'Deletes a user' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
 
-  @ApiOperation({ summary: "Adds a user to a house" })
+  @ApiOperation({ summary: 'Adds a user to a house' })
   @ApiResponse({ status: 200, description: 'User added to House successfully' })
   @Post(':id/house/:houseId')
   addUserToHouse(@Param('id') id: string, @Param('houseId') houseId: string) {
     return this.usersService.addUserToHouse(+id, +houseId);
   }
 
-  @ApiOperation({ summary: "Removes a user from a house" })
+  @ApiOperation({ summary: 'Removes a user from a house' })
   @ApiResponse({
     status: 200,
     description: 'User removed to House successfully',
