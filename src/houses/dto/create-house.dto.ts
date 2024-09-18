@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateHouseDto {
   @ApiProperty()
-  readonly condo: string;
+  readonly condoId: number;
 
   @ApiProperty()
   readonly number: number;

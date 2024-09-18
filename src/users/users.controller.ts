@@ -57,6 +57,15 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Adds a user to a house' })
   @ApiResponse({ status: 200, description: 'User added to House successfully' })
+  @ApiResponse({
+    status: 403,
+    description: 'User already belongs to house',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User or house not found',
+  })
+  @HttpCode(HttpStatus.OK)
   @Post(':id/house/:houseId')
   addUserToHouse(@Param('id') id: string, @Param('houseId') houseId: string) {
     return this.usersService.addUserToHouse(+id, +houseId);
@@ -67,6 +76,15 @@ export class UsersController {
     status: 200,
     description: 'User removed to House successfully',
   })
+  @ApiResponse({
+    status: 403,
+    description: 'User does not belong to house',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User or house not found',
+  })
+  @HttpCode(HttpStatus.OK)
   @Delete(':id/house/:houseId')
   deleteUserFromHouse(
     @Param('id') id: string,

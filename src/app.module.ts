@@ -8,6 +8,7 @@ import { HousesModule } from './houses/houses.module';
 import { VisitantModule } from './visitant/visitant.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
+import { CondoModule } from './condo/condo.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { FilesModule } from './files/files.module';
     VisitantModule,
     AuthModule,
     FilesModule,
+    CondoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

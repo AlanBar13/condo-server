@@ -33,10 +33,6 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.house == null) {
-      throw new ForbiddenException('User not added to house');
-    }
-
     // TODO: Refactor this to get the password and the relation on the same query
     const userPass = await this.userRepository.findOne({
       where: { id: user.id },

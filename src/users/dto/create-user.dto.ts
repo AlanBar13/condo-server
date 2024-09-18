@@ -17,6 +17,9 @@ export class CreateUserDto {
   @ApiProperty()
   readonly isOwner: boolean;
 
+  @ApiProperty({ nullable: true })
+  readonly houseId: number;
+
   @ApiProperty({ enum: ['user', 'admin', 'owner'] })
   readonly role: UserRole;
 }

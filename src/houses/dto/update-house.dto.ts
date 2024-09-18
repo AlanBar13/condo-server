@@ -3,7 +3,7 @@ import { CreateHouseDto } from './create-house.dto';
 
 export class UpdateHouseDto extends PartialType(CreateHouseDto) {
   @ApiProperty()
-  readonly condo: string;
+  readonly condoId: number;
 
   @ApiProperty()
   readonly number: number;

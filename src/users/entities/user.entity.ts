@@ -11,7 +11,7 @@ import {
 export enum UserRole {
   ADMIN = 'admin',
   USER = 'user',
-  OWNER = 'ownwer',
+  OWNER = 'owner',
   DEV = 'dev',
 }
 
@@ -40,6 +40,9 @@ export class User {
 
   @ManyToOne(() => House, (house) => house.habitants)
   house: House;
+
+  @Column({ nullable: true })
+  houseId: number;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

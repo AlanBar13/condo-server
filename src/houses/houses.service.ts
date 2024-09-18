@@ -1,10 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { House } from './entities/house.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class HousesService {
@@ -12,28 +11,28 @@ export class HousesService {
     @InjectRepository(House) private houseRepository: Repository<House>,
   ) {}
 
-  create(createHouseDto: CreateHouseDto): Promise<House> {
+  async create(createHouseDto: CreateHouseDto): Promise<House> {
     const house = new House();
 
-    house.condo = createHouseDto.condo;
+    house.condoId = createHouseDto.condoId;
     house.address = createHouseDto.address;
     house.number = createHouseDto.number;
 
-    return this.houseRepository.save(house);
+    const {id} = await this.houseRepository.save(house);
+
+    return this.houseRepository.findOne({ where: { id }, relations: { condo: true }});
   }
 
   findAll(): Promise<House[]> {
     return this.houseRepository.find({
-      relations: {
-        habitants: true,
-      },
+      relations: ["habitants", "condo"]
     });
   }
 
   findOne(id: number): Promise<House> {
     return this.houseRepository.findOne({
       where: { id },
-      relations: { habitants: true, visitantRequest: true },
+      relations: ["visitantRequest", "habitants", "condo"],
     });
   }
 
