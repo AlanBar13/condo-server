@@ -8,6 +8,7 @@ import { toDataURL } from 'qrcode';
 import { User } from 'src/users/entities/user.entity';
 import { Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import { TokenInfo } from 'src/auth/auth.service';
 
 @Injectable()
 export class VisitantService {
@@ -17,7 +18,7 @@ export class VisitantService {
   ) {}
   async create(
     createVisitantDto: CreateVisitantDto,
-    user: User,
+    user: TokenInfo,
     req: Request,
   ): Promise<Visitant> {
     const visitant = new Visitant();

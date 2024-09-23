@@ -11,11 +11,12 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { ROLES_KEY } from 'src/decorators/roles.decorator';
 import { User, UserRole } from 'src/users/entities/user.entity';
+import { TokenInfo } from './auth.service';
 
 declare global {
   namespace Express {
     export interface Request {
-      user?: User;
+      user?: TokenInfo;
     }
   }
 }
@@ -39,7 +40,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const user = await this.jwtService.verifyAsync<User>(token, {
+      const user = await this.jwtService.verifyAsync<TokenInfo>(token, {
         secret: process.env.JWT_SECRET,
       });
 

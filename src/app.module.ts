@@ -9,6 +9,7 @@ import { VisitantModule } from './visitant/visitant.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
 import { CondoModule } from './condo/condo.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CondoModule } from './condo/condo.module';
     AuthModule,
     FilesModule,
     CondoModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,8 +8,18 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash, compare } from 'bcrypt';
+import { House } from 'src/houses/entities/house.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+
+export interface TokenInfo {
+  id: number,
+  username: string,
+  name: string,
+  role: string,
+  lastName: string,
+  house: House,
+}
 
 @Injectable()
 export class AuthService {
@@ -43,8 +53,8 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = {
-      sub: user.id,
+    const payload: TokenInfo = {
+      id: user.id,
       username: user.email,
       name: user.name,
       role: user.role,

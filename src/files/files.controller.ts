@@ -51,7 +51,6 @@ export class FilesController {
     @Body() uploadFileDto: UploadFileDto,
   ) {
     const isPublicValue = uploadFileDto.isPublic === 'true' ? true : false;
-    console.log(uploadFileDto.isPublic);
     return await this.filesService.uploadSingleFile(file, isPublicValue);
   }
 
