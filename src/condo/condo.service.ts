@@ -7,7 +7,9 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class CondoService {
-  constructor(@InjectRepository(Condo) private condoRepository: Repository<Condo>){}
+  constructor(
+    @InjectRepository(Condo) private condoRepository: Repository<Condo>,
+  ) {}
 
   create(createCondoDto: CreateCondoDto) {
     const condo = new Condo();
@@ -24,13 +26,13 @@ export class CondoService {
   }
 
   findOne(id: number) {
-    return this.condoRepository.findOne({ where: { id }});
+    return this.condoRepository.findOne({ where: { id } });
   }
 
   async update(id: number, updateCondoDto: UpdateCondoDto) {
     await this.condoRepository.update(id, updateCondoDto);
 
-    return this.condoRepository.findOneBy({ id })
+    return this.condoRepository.findOneBy({ id });
   }
 
   async remove(id: number) {

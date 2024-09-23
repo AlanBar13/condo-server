@@ -20,7 +20,7 @@ export class House {
   condo: Condo;
 
   @Column()
-  condoId: number
+  condoId: number;
 
   @Column()
   number: number;

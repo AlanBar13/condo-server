@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateNotificationDTO {
-    @ApiProperty()
-    readonly deviceType: string;
+  @ApiProperty()
+  readonly deviceType: string;
 }

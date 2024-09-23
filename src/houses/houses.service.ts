@@ -18,21 +18,24 @@ export class HousesService {
     house.address = createHouseDto.address;
     house.number = createHouseDto.number;
 
-    const {id} = await this.houseRepository.save(house);
+    const { id } = await this.houseRepository.save(house);
 
-    return this.houseRepository.findOne({ where: { id }, relations: { condo: true }});
+    return this.houseRepository.findOne({
+      where: { id },
+      relations: { condo: true },
+    });
   }
 
   findAll(): Promise<House[]> {
     return this.houseRepository.find({
-      relations: ["habitants", "condo"]
+      relations: ['habitants', 'condo'],
     });
   }
 
   findOne(id: number): Promise<House> {
     return this.houseRepository.findOne({
       where: { id },
-      relations: ["visitantRequest", "habitants", "condo"],
+      relations: ['visitantRequest', 'habitants', 'condo'],
     });
   }
 

@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,7 +31,7 @@ export class UsersService {
       user.lastName = createUserDto.lastName;
       user.role = createUserDto.role;
 
-      if (createUserDto.houseId !== null){
+      if (createUserDto.houseId !== null) {
         user.houseId = createUserDto.houseId;
       }
 
@@ -36,10 +42,14 @@ export class UsersService {
 
       const { id } = await this.userRepository.save(user);
 
-      return this.userRepository.findOne({ where: { id }, select: { password: false }, relations: { house: { condo: true }}});
+      return this.userRepository.findOne({
+        where: { id },
+        select: { password: false },
+        relations: { house: { condo: true } },
+      });
     } catch (error) {
-      Logger.warn(error)
-      throw new InternalServerErrorException("User could not be created")
+      Logger.warn(error);
+      throw new InternalServerErrorException('User could not be created');
     }
   }
 
@@ -76,7 +86,10 @@ export class UsersService {
   }
 
   async addUserToHouse(userId: number, houseId: number): Promise<string> {
-    const house = await this.houseRepository.findOne({where:{ id: houseId }, relations: ["condo", "habitants"]});
+    const house = await this.houseRepository.findOne({
+      where: { id: houseId },
+      relations: ['condo', 'habitants'],
+    });
     if (house === null) {
       throw new NotFoundException('House not found');
     }
@@ -86,8 +99,8 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    if (house.habitants.some(habitant => habitant.id === user.id)) {
-      throw new ForbiddenException("User already belongs to house")
+    if (house.habitants.some((habitant) => habitant.id === user.id)) {
+      throw new ForbiddenException('User already belongs to house');
     }
 
     user.house = house;
@@ -96,7 +109,10 @@ export class UsersService {
   }
 
   async removeUserFromHouse(userId: number, houseId: number): Promise<string> {
-    const house = await this.houseRepository.findOne({where:{ id: houseId }, relations: ["condo", "habitants"]});
+    const house = await this.houseRepository.findOne({
+      where: { id: houseId },
+      relations: ['condo', 'habitants'],
+    });
     if (house === null) {
       throw new NotFoundException('House not found');
     }
@@ -106,8 +122,8 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    if (!house.habitants.some(habitant => habitant.id === user.id)) {
-      throw new ForbiddenException("User does not belong to house")
+    if (!house.habitants.some((habitant) => habitant.id === user.id)) {
+      throw new ForbiddenException('User does not belong to house');
     }
 
     user.house = null;

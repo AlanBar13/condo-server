@@ -13,12 +13,12 @@ import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 
 export interface TokenInfo {
-  id: number,
-  username: string,
-  name: string,
-  role: string,
-  lastName: string,
-  house: House,
+  id: number;
+  username: string;
+  name: string;
+  role: string;
+  lastName: string;
+  house: House;
 }
 
 @Injectable()

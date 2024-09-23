@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CondoService } from './condo.service';
 import { CreateCondoDto } from './dto/create-condo.dto';
 import { UpdateCondoDto } from './dto/update-condo.dto';
