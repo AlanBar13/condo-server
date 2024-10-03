@@ -5,11 +5,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { SignInDTO } from './dto/sign-in.dto';
 import {
   ApiBearerAuth,
@@ -17,6 +19,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { GoogleOauthGuard } from './guards/google-oauth.guard';
+import { Response } from 'express';
+import { OAuthUser } from './dto/oauth-user';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -44,5 +49,20 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleOauthGuard)
+  async googleAuthCallback(@Request() req, @Res() res: Response) {
+    try {
+      const token = await this.authService.oAuthLogin(req.user as OAuthUser);
+      if (token) {
+        res.redirect(`http://localhost:3000/oauth?token=${token}`);
+      } else {
+        res.redirect(`http://localhost:3000/login?error=404`);
+      }
+    } catch (error) {
+      res.status(500).send({ success: false, message: error.message });
+    }
   }
 }

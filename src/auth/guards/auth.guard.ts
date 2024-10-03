@@ -10,8 +10,8 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { ROLES_KEY } from 'src/decorators/roles.decorator';
-import { User, UserRole } from 'src/users/entities/user.entity';
-import { TokenInfo } from './auth.service';
+import { UserRole } from 'src/users/entities/user.entity';
+import { TokenInfo } from '../auth.service';
 
 declare global {
   namespace Express {

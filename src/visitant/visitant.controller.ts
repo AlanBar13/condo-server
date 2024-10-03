@@ -20,10 +20,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Request as ExpressRequest } from 'express';
 import { RequestUser } from 'src/decorators/user.decorator';
-import { User } from 'src/users/entities/user.entity';
 import { TokenInfo } from 'src/auth/auth.service';
 
 @ApiTags('Visitant')
