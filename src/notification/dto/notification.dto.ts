@@ -8,6 +8,17 @@ export class AcceptNotificationDTO {
   readonly notificationToken: string;
 }
 
+export class SingleNotificationDTO {
+  @ApiProperty({ description: 'Id of the user to send the notification' })
+  readonly token: string;
+
+  @ApiProperty({ description: 'Title of the notification' })
+  readonly title: string;
+
+  @ApiProperty({ description: 'Body of the notification' })
+  readonly body: string;
+}
+
 export class NotificationDTO {
   @ApiProperty({ description: 'Id of the user to send the notification' })
   readonly userIds: number[];
@@ -17,9 +28,6 @@ export class NotificationDTO {
 
   @ApiProperty({ description: 'Body of the notification' })
   readonly body: string;
-
-  @ApiProperty({ description: 'Icon of the notification' })
-  readonly icon: string;
 }
 
 export class TopicNotificationDTO {

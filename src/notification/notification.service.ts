@@ -16,6 +16,7 @@ import {
   NotificationDTO,
   AcceptNotificationDTO,
   TopicNotificationDTO,
+  SingleNotificationDTO,
 } from './dto/notification.dto';
 import { UpdateNotificationDTO } from './dto/update-notification.dto';
 import { TokenInfo } from 'src/auth/auth.service';
@@ -65,6 +66,24 @@ export class NotificationService {
     }
   }
 
+  async sendNotification(notificationDto: SingleNotificationDTO) {
+    try {
+      const response = await firebase.messaging().send({
+        token: notificationDto.token,
+        webpush: {
+          notification: {
+            title: notificationDto.title,
+            body: notificationDto.body,
+          },
+        },
+      });
+      return response;
+    } catch (error) {
+      Logger.warn(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
   async sendSingleNotification(notificationDto: NotificationDTO) {
     try {
       if (
@@ -84,7 +103,6 @@ export class NotificationService {
           notification: {
             title: notificationDto.title,
             body: notificationDto.body,
-            icon: notificationDto.icon,
           },
         },
       });
@@ -117,7 +135,6 @@ export class NotificationService {
           notification: {
             title: notificationDto.title,
             body: notificationDto.body,
-            icon: notificationDto.icon,
           },
         },
       });

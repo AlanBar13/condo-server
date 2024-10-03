@@ -13,10 +13,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AcceptNotificationDTO, NotificationDTO } from './dto/notification.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import {
+  AcceptNotificationDTO,
+  NotificationDTO,
+  SingleNotificationDTO,
+} from './dto/notification.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RequestUser } from 'src/decorators/user.decorator';
-import { User } from 'src/users/entities/user.entity';
 import { UpdateNotificationDTO } from './dto/update-notification.dto';
 import { TokenInfo } from 'src/auth/auth.service';
 
@@ -57,8 +60,16 @@ export class NotificationController {
   @ApiOperation({ summary: 'Send single notification to certain token' })
   @ApiResponse({ status: 200, description: 'Notification sent successfully' })
   @HttpCode(HttpStatus.OK)
+  @Post()
+  sendNotification(@Body() notificationDTO: SingleNotificationDTO) {
+    return this.notificationService.sendNotification(notificationDTO);
+  }
+
+  @ApiOperation({ summary: 'Send single notification to certain user' })
+  @ApiResponse({ status: 200, description: 'Notification sent successfully' })
+  @HttpCode(HttpStatus.OK)
   @Post('single')
-  sendNotification(@Body() notificationDTO: NotificationDTO) {
+  sendSingleNotification(@Body() notificationDTO: NotificationDTO) {
     return this.notificationService.sendSingleNotification(notificationDTO);
   }
 
