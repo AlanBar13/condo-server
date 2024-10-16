@@ -53,7 +53,9 @@ export class AuthService {
     const user = await this.userRepository.findOne({
       where: { email: username },
       relations: {
-        house: true,
+        house: {
+          condo: true,
+        },
       },
     });
     if (!user) {
@@ -94,7 +96,9 @@ export class AuthService {
       const user = await this.userRepository.findOne({
         where: { email: userInfo.email },
         relations: {
-          house: true,
+          house: {
+            condo: true,
+          }
         },
       });
 
@@ -108,16 +112,18 @@ export class AuthService {
 
         const createdUser = await this.userRepository.save(user);
 
+        const newUser = await this.userRepository.findOne({ where: { id: createdUser.id }, relations: { house: { condo: true } } });
+
         const payload: TokenInfo = {
-          id: createdUser.id,
-          username: createdUser.email,
-          name: createdUser.name,
-          role: createdUser.role,
-          lastName: createdUser.lastName,
-          house: createdUser.house,
+          id: newUser.id,
+          username: newUser.email,
+          name: newUser.name,
+          role: newUser.role,
+          lastName: newUser.lastName,
+          house: newUser.house,
         };
 
-        return this.generateToken(payload);
+        return await this.generateToken(payload);
       }
 
       const payload: TokenInfo = {
@@ -129,7 +135,7 @@ export class AuthService {
         house: user.house,
       };
 
-      return this.generateToken(payload);
+      return await this.generateToken(payload);
     } catch (error) {
       Logger.error(error);
     }
