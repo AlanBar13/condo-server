@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   UseGuards,
+  Res
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import {
@@ -18,6 +20,7 @@ import {
   NotificationDTO,
   SingleNotificationDTO,
 } from './dto/notification.dto';
+import { Request as ExpressRequest, Response } from 'express';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RequestUser } from 'src/decorators/user.decorator';
 import { UpdateNotificationDTO } from './dto/update-notification.dto';
@@ -27,6 +30,29 @@ import { TokenInfo } from 'src/auth/auth.service';
 @Controller('notification')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
+
+  @ApiOperation({ summary: 'Retrieves all notification tokens' })
+  @ApiResponse({ status: 200, description: 'List of all notification tokens' })
+  @Get('token')
+  async getNotificationTokens(
+    @Res() res: Response,
+  ) {
+    const tokens = await this.notificationService.getNotificationTokens();
+    res.status(200).json(tokens);
+  }
+
+  @ApiOperation({ summary: 'Retrieves all notification tokens' })
+  @ApiResponse({ status: 200, description: 'List of all notification tokens' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('user/token')
+  async getNotificationToken(
+    @Res() res: Response,
+    @RequestUser() user: TokenInfo,
+  ) {
+    const token = await this.notificationService.getNotificationToken(user);
+    res.status(200).json(token);
+  }
 
   @ApiOperation({ summary: 'Register notification token for user' })
   @ApiResponse({ status: 201, description: 'Token registration successful' })

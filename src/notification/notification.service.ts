@@ -66,9 +66,19 @@ export class NotificationService {
     }
   }
 
+  async getNotificationTokens() {
+    return await this.notificationTokenRepository.find();
+  }
+
+  async getNotificationToken(user: TokenInfo) {
+    return await this.notificationTokenRepository.findOne({
+      where: { userId: user.id, status: NotificationStatus.ACTIVE },
+    });
+  }
+
   async sendNotification(notificationDto: SingleNotificationDTO) {
     try {
-      const response = await firebase.messaging().send({
+      await firebase.messaging().send({
         token: notificationDto.token,
         webpush: {
           notification: {
@@ -77,7 +87,11 @@ export class NotificationService {
           },
         },
       });
-      return response;
+
+      return {
+        success: true,
+        message: `Notification send successfully`,
+      };
     } catch (error) {
       Logger.warn(error);
       throw new InternalServerErrorException();
@@ -97,7 +111,7 @@ export class NotificationService {
         await this.notificationTokenRepository.findOne({
           where: { id: notificationDto.userIds[0] },
         });
-      const response = await firebase.messaging().send({
+      await firebase.messaging().send({
         token: notificationToken,
         webpush: {
           notification: {
@@ -106,7 +120,11 @@ export class NotificationService {
           },
         },
       });
-      return response;
+
+      return {
+        success: true,
+        message: `Notification send successfully`,
+      };
     } catch (error) {
       Logger.warn(error);
       throw new InternalServerErrorException();
@@ -138,6 +156,7 @@ export class NotificationService {
           },
         },
       });
+
       return {
         success: true,
         message: `Reaching ${tokens.length} users. Successfully sent ${response.successCount} messages. ${response.failureCount} failed.`,
@@ -157,6 +176,7 @@ export class NotificationService {
           body: notificationDto.body,
         },
       });
+
       return { success: true, message: 'Topic notification sent succesfully' };
     } catch (error) {
       Logger.warn(error);
